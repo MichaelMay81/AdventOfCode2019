@@ -55,6 +55,39 @@ class AoC_2019_Test extends FunSuite {
     assert(Day5.compute(List(3,0,4,0,99), List(99)) === Day5.RValue(List(99,0,4,0,99), List(99)))
     assert(Day5.compute(List(1002,4,3,4,33)) === Day5.RValue(List(1002,4,3,4,99), List()))
   }
+  test("AoC_2019.Day5 Part2") {
+    assert(Day5.compute(List(3,9,8,9,10,9,4,9,99,-1,8), List(99)).output(0) === 0)
+    assert(Day5.compute(List(3,9,8,9,10,9,4,9,99,-1,8), List(8)).output(0) === 1)
+    assert(Day5.compute(List(3,9,8,9,10,9,4,9,99,-1,8), List(1)).output(0) === 0)
+
+    assert(Day5.compute(List(3,9,7,9,10,9,4,9,99,-1,8), List(99)).output(0) === 0)
+    assert(Day5.compute(List(3,9,7,9,10,9,4,9,99,-1,8), List(8)).output(0) === 0)
+    assert(Day5.compute(List(3,9,7,9,10,9,4,9,99,-1,8), List(1)).output(0) === 1)
+
+    assert(Day5.compute(List(3,3,1108,-1,8,3,4,3,99), List(99)).output(0) === 0)
+    assert(Day5.compute(List(3,3,1108,-1,8,3,4,3,99), List(8)).output(0) === 1)
+    assert(Day5.compute(List(3,3,1108,-1,8,3,4,3,99), List(1)).output(0) === 0)
+
+    assert(Day5.compute(List(3,3,1107,-1,8,3,4,3,99), List(99)).output(0) === 0)
+    assert(Day5.compute(List(3,3,1107,-1,8,3,4,3,99), List(8)).output(0) === 0)
+    assert(Day5.compute(List(3,3,1107,-1,8,3,4,3,99), List(1)).output(0) === 1)
+
+    assert(Day5.compute(List(3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9), List(-1)).output(0) === 1)
+    assert(Day5.compute(List(3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9), List(0)).output(0) === 0)
+    assert(Day5.compute(List(3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9), List(1)).output(0) === 1)
+
+    assert(Day5.compute(List(3,3,1105,-1,9,1101,0,0,12,4,12,99,1), List(-1)).output(0) === 1)
+    assert(Day5.compute(List(3,3,1105,-1,9,1101,0,0,12,4,12,99,1), List(0)).output(0) === 0)
+    assert(Day5.compute(List(3,3,1105,-1,9,1101,0,0,12,4,12,99,1), List(1)).output(0) === 1)
+
+    val input = List(3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
+      1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
+      999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99)
+    assert(Day5.compute(input, List(0)).output.head === 999)
+    assert(Day5.compute(input, List(8)).output.head === 1000)
+    assert(Day5.compute(input, List(100)).output.head === 1001)
+  }
+
   test("AoC_2019.Day6 Part1") {
     assert(Day6.calcTotalNumberOfOrbits("COM)B\nB)C\nC)D\nD)E\nE)F\nB)G\nG)H\nD)I\nE)J\nJ)K\nK)L") === 42)
   }

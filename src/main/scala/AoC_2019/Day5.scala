@@ -24,47 +24,66 @@ object Day5 {
   def compute(
                intcode: List[Int],
                input: List[Int] = List(),
-               pos: Int = 0,
+               intpointer: Int = 0,
                output: List[Int] = List()): RValue =
   {
-    val opcodeAndParams = parseOpcode(intcode(pos))
+    val opcodeAndParams = parseOpcode(intcode(intpointer))
 
     def getValue(i:Int) =
       (if (i < opcodeAndParams.length) opcodeAndParams(i) else 0) match {
-        case 0 => intcode(intcode(pos + i)) // position mode
-        case 1 => intcode(pos + i) // immediate mode
+        case 0 => intcode(intcode(intpointer + i)) // position mode
+        case 1 => intcode(intpointer + i) // immediate mode
       }
+    def writeTo(i:Int) = intcode(intpointer + i)
 
     opcodeAndParams.head match {
       case 1 => // Add
         compute(
-          intcode.updated(intcode(pos + 3), getValue(1) + getValue(2)),
+          intcode.updated(writeTo(3), getValue(1) + getValue(2)),
           input,
-          pos + 4,
+          intpointer + 4,
           output)
       case 2 => // Mul
         compute(
-          intcode.updated(intcode(pos + 3), getValue(1) * getValue(2)),
+          intcode.updated(writeTo(3), getValue(1) * getValue(2)),
           input,
-          pos + 4,
+          intpointer + 4,
           output)
       case 3 => // Input
         if (input.nonEmpty)
           compute(
-            intcode.updated(intcode(pos + 1), input.head),
+            intcode.updated(writeTo(1), input.head),
             input.drop(1),
-            pos + 2,
+            intpointer + 2,
             output)
         else {
           println("Error: not enough input")
-          compute(intcode, input, pos + 2, output)
+          compute(intcode, input, intpointer + 2, output)
         }
       case 4 => // Output
         compute(
           intcode,
           input,
-          pos + 2,
+          intpointer + 2,
           getValue(1) :: output)
+      case 5 => // jump-if-true
+        val newIntPointer = if (getValue(1) != 0) getValue(2) else intpointer + 3
+        compute(intcode, input, newIntPointer, output)
+      case 6 => // jump-if-false
+        val newIntPointer = if (getValue(1) == 0) getValue(2) else intpointer + 3
+        compute(intcode, input, newIntPointer, output)
+      case 7 => // less than
+        compute(
+          intcode.updated(
+            writeTo(3),
+            if (getValue(1) < getValue(2)) 1 else 0),
+          input, intpointer + 4, output)
+      case 8 => // equals
+        compute(
+          intcode.updated(
+            writeTo(3),
+            if (getValue(1) == getValue(2)) 1 else 0),
+          input, intpointer + 4, output)
       case 99 =>
         RValue(intcode, output)
     }

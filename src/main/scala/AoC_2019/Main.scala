@@ -63,6 +63,7 @@ object Main {
     val intcode = lines(0).split(',').map(s => s.toInt).toList
 
     println("day5 part1 result: " + Day5.compute(intcode, List(1)).output)
+    println("day5 part2 result: " + Day5.compute(intcode, List(5)).output)
   }
 
   def day6(): Unit = {
