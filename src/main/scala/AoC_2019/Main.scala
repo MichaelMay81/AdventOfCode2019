@@ -3,7 +3,7 @@ package AoC_2019
 object Main {
   def main(args: Array[String]): Unit = {
     println("Hello world!")
-    day5()
+    day7()
   }
 
   def day1(): Unit = {
@@ -72,8 +72,17 @@ object Main {
     source.close()
 
     println("day6 part1 result: " + Day6.calcTotalNumberOfOrbits(input))
-    println("day6 part1 result: " + Day6_1.calcTotalNumberOfOrbits(input))
-    println("day6 part1 result: " + Day6_2.calcTotalNumberOfOrbits(input))
+    println("day6 part2 result: " + Day6.calcDistance(input, "YOU", "SAN"))
+  }
+
+  def day7(): Unit = {
+    val source = scala.io.Source.fromFile("resources\\day7_input.txt")
+    val lines = source.getLines().toArray
+    source.close()
+
+    val intcode = lines(0).split(',').map(s => s.toInt).toList
+    println("day7 part1 result: " + Day7.findBestThrusterInput(intcode))
+    println("day7 part2 result: " + Day7.findBestThrusterInput2(intcode))
   }
 
 }

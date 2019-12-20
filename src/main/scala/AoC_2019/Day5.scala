@@ -19,7 +19,7 @@ object Day5 {
     }
   }
 
-  case class RValue(intcode: List[Int], output: List[Int])
+  case class RValue(intcode: List[Int], output: List[Int], intpointer: Option[Int])
   @annotation.tailrec
   def compute(
                intcode: List[Int],
@@ -57,8 +57,7 @@ object Day5 {
             intpointer + 2,
             output)
         else {
-          println("Error: not enough input")
-          compute(intcode, input, intpointer + 2, output)
+          RValue(intcode, output, Some(intpointer))
         }
       case 4 => // Output
         compute(
@@ -85,7 +84,7 @@ object Day5 {
             if (getValue(1) == getValue(2)) 1 else 0),
           input, intpointer + 4, output)
       case 99 =>
-        RValue(intcode, output)
+        RValue(intcode, output, None)
     }
   }
 }

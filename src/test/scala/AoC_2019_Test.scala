@@ -1,4 +1,4 @@
-import AoC_2019.{Day1, Day2, Day3, Day4, Day5, Day6}
+import AoC_2019.{Day1, Day2, Day3, Day4, Day5, Day6, Day7}
 import org.scalatest.FunSuite
 
 class AoC_2019_Test extends FunSuite {
@@ -52,8 +52,8 @@ class AoC_2019_Test extends FunSuite {
     assert(Day4.checkPassword(111122, false))
   }
   test("AoC_2019.Day5 Part1") {
-    assert(Day5.compute(List(3,0,4,0,99), List(99)) === Day5.RValue(List(99,0,4,0,99), List(99)))
-    assert(Day5.compute(List(1002,4,3,4,33)) === Day5.RValue(List(1002,4,3,4,99), List()))
+    assert(Day5.compute(List(3,0,4,0,99), List(99)) === Day5.RValue(List(99,0,4,0,99), List(99), None))
+    assert(Day5.compute(List(1002,4,3,4,33)) === Day5.RValue(List(1002,4,3,4,99), List(), None))
   }
   test("AoC_2019.Day5 Part2") {
     assert(Day5.compute(List(3,9,8,9,10,9,4,9,99,-1,8), List(99)).output(0) === 0)
@@ -90,5 +90,31 @@ class AoC_2019_Test extends FunSuite {
 
   test("AoC_2019.Day6 Part1") {
     assert(Day6.calcTotalNumberOfOrbits("COM)B\nB)C\nC)D\nD)E\nE)F\nB)G\nG)H\nD)I\nE)J\nJ)K\nK)L") === 42)
+  }
+
+  test("AoC_2019.Day6 Part2") {
+    val orbits = "COM)B\nB)C\nC)D\nD)E\nE)F\nB)G\nG)H\nD)I\nE)J\nJ)K\nK)L\nK)YOU\nI)SAN"
+    assert(Day6.calcDistance(orbits, "YOU", "SAN") === 4)
+  }
+
+  test("AoC_2019.Day7 Part1") {
+    val intcode1 = List(3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0)
+    assert(Day7.calcThrusterOutput(intcode1, List(4,3,2,1,0)) === 43210)
+    val intcode2 = List(3,23,3,24,1002,24,10,24,1002,23,-1,23,101,5,23,23,1,24,23,23,4,23,99,0,0)
+    assert(Day7.calcThrusterOutput(intcode2, List(0,1,2,3,4)) === 54321)
+    val intcode3 = List(3,31,3,32,1002,32,10,32,1001,31,-2,31,1007,31,0,33,
+      1002,33,7,33,1,33,31,31,1,32,31,31,4,31,99,0,0,0)
+    assert(Day7.calcThrusterOutput(intcode3, List(1,0,4,3,2)) === 65210)
+  }
+
+  test("AoC_2019.Day7 Part2") {
+    val intcode1 = List(3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,
+      27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5)
+    assert(Day7.calcThrusterOutput2(intcode1, List(9,8,7,6,5)) === 139629729)
+    val intcode2 = List(3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,54,
+      -5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,53,4,
+      53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10)
+    assert(Day7.calcThrusterOutput2(intcode2, List(9,7,8,5,6)) === 18216)
+
   }
 }
