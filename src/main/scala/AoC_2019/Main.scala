@@ -3,7 +3,7 @@ package AoC_2019
 object Main {
   def main(args: Array[String]): Unit = {
     println("Hello world!")
-    day7()
+    day8()
   }
 
   def day1(): Unit = {
@@ -85,4 +85,14 @@ object Main {
     println("day7 part2 result: " + Day7.findBestThrusterInput2(intcode))
   }
 
+  def day8(): Unit = {
+    val source = scala.io.Source.fromFile("resources\\day8_input.txt")
+    val lines = source.getLines().toArray
+    source.close()
+
+    val input = Day8.stringToImage(lines(0), 25, 6)
+    println("day8 part1 result: " + Day8.calcCheckSum(input))
+
+    Day8.renderImage(input)
+  }
 }
