@@ -1,5 +1,6 @@
 package AoC_2019
 import scala.collection.immutable.Queue
+import Day5.Intprog
 
 object Day7 {
   def calcThrusterOutput(intcode: List[Int], input: List[Int]): Int = {
@@ -8,18 +9,18 @@ object Day7 {
       input match {
         case Nil => (lastOutput, intcodes)
         case in :: rest =>
-          val result = Day5.compute(intcode, List(in, lastOutput))
+          val result = Day5.compute(Intprog(intcode), List(in, lastOutput))
           calcAmps(
             rest,
             result.output.head,
-            result.intcode :: intcodes)
+            result.program.code :: intcodes)
       }
 
     calcAmps(input)._1
   }
   def calcThrusterOutput2(intcode: List[Int], input: List[Int]): Int = {
 
-    case class Status(input: Option[Int], intcode: List[Int] = intcode, pntr: Int = 0)
+    case class Status(input: Option[Int], program: Intprog = Intprog(intcode))
 
     @annotation.tailrec
     def calcAmps(processQueue: Queue[Status], lastOutput: List[Int] = List(0)): List[Int] =
@@ -29,18 +30,17 @@ object Day7 {
             case None => lastOutput.reverse
             case Some(in) => in :: lastOutput.reverse
           }
-          val result = Day5.compute(in.intcode, input, in.pntr)
+          val result = Day5.compute(in.program, input)
 
-          result.intpointer match {
-            case None =>
-              calcAmps(
-                rest,
-                result.output)
-            case Some(pntr) =>
-              calcAmps(
-                rest.enqueue(Status(None, result.intcode, pntr)),
-                result.output)
-           }
+          if (result.program.finished) {
+            calcAmps(
+              rest,
+              result.output)
+          } else {
+            calcAmps(
+              rest.enqueue(Status(None, result.program)),
+              result.output)
+          }
         }
         case _ => lastOutput
       }

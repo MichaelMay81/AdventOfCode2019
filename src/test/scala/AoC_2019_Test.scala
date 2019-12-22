@@ -1,3 +1,4 @@
+import AoC_2019.Day5.Intprog
 import AoC_2019.Day8.{Image, Layer, Row}
 import AoC_2019.{Day1, Day2, Day3, Day4, Day5, Day6, Day7, Day8}
 import org.scalatest.FunSuite
@@ -53,40 +54,51 @@ class AoC_2019_Test extends FunSuite {
     assert(Day4.checkPassword(111122, false))
   }
   test("AoC_2019.Day5 Part1") {
-    assert(Day5.compute(List(3,0,4,0,99), List(99)) === Day5.RValue(List(99,0,4,0,99), List(99), None))
-    assert(Day5.compute(List(1002,4,3,4,33)) === Day5.RValue(List(1002,4,3,4,99), List(), None))
+    assert(Day5.compute(Intprog(List(3,0,4,0,99)), List(99)) === Day5.RValue(Intprog(List(99,0,4,0,99), 4, true), List(99)))
+    assert(Day5.compute(Intprog(List(1002,4,3,4,33))) === Day5.RValue(Intprog(List(1002,4,3,4,99), 4, true), List()))
   }
   test("AoC_2019.Day5 Part2") {
-    assert(Day5.compute(List(3,9,8,9,10,9,4,9,99,-1,8), List(99)).output(0) === 0)
-    assert(Day5.compute(List(3,9,8,9,10,9,4,9,99,-1,8), List(8)).output(0) === 1)
-    assert(Day5.compute(List(3,9,8,9,10,9,4,9,99,-1,8), List(1)).output(0) === 0)
+    assert(Day5.compute(Intprog(List(3,9,8,9,10,9,4,9,99,-1,8)), List(99)).output(0) === 0)
+    assert(Day5.compute(Intprog(List(3,9,8,9,10,9,4,9,99,-1,8)), List(8)).output(0) === 1)
+    assert(Day5.compute(Intprog(List(3,9,8,9,10,9,4,9,99,-1,8)), List(1)).output(0) === 0)
 
-    assert(Day5.compute(List(3,9,7,9,10,9,4,9,99,-1,8), List(99)).output(0) === 0)
-    assert(Day5.compute(List(3,9,7,9,10,9,4,9,99,-1,8), List(8)).output(0) === 0)
-    assert(Day5.compute(List(3,9,7,9,10,9,4,9,99,-1,8), List(1)).output(0) === 1)
+    assert(Day5.compute(Intprog(List(3,9,7,9,10,9,4,9,99,-1,8)), List(99)).output(0) === 0)
+    assert(Day5.compute(Intprog(List(3,9,7,9,10,9,4,9,99,-1,8)), List(8)).output(0) === 0)
+    assert(Day5.compute(Intprog(List(3,9,7,9,10,9,4,9,99,-1,8)), List(1)).output(0) === 1)
 
-    assert(Day5.compute(List(3,3,1108,-1,8,3,4,3,99), List(99)).output(0) === 0)
-    assert(Day5.compute(List(3,3,1108,-1,8,3,4,3,99), List(8)).output(0) === 1)
-    assert(Day5.compute(List(3,3,1108,-1,8,3,4,3,99), List(1)).output(0) === 0)
+    assert(Day5.compute(Intprog(List(3,3,1108,-1,8,3,4,3,99)), List(99)).output(0) === 0)
+    assert(Day5.compute(Intprog(List(3,3,1108,-1,8,3,4,3,99)), List(8)).output(0) === 1)
+    assert(Day5.compute(Intprog(List(3,3,1108,-1,8,3,4,3,99)), List(1)).output(0) === 0)
 
-    assert(Day5.compute(List(3,3,1107,-1,8,3,4,3,99), List(99)).output(0) === 0)
-    assert(Day5.compute(List(3,3,1107,-1,8,3,4,3,99), List(8)).output(0) === 0)
-    assert(Day5.compute(List(3,3,1107,-1,8,3,4,3,99), List(1)).output(0) === 1)
+    assert(Day5.compute(Intprog(List(3,3,1107,-1,8,3,4,3,99)), List(99)).output(0) === 0)
+    assert(Day5.compute(Intprog(List(3,3,1107,-1,8,3,4,3,99)), List(8)).output(0) === 0)
+    assert(Day5.compute(Intprog(List(3,3,1107,-1,8,3,4,3,99)), List(1)).output(0) === 1)
 
-    assert(Day5.compute(List(3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9), List(-1)).output(0) === 1)
-    assert(Day5.compute(List(3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9), List(0)).output(0) === 0)
-    assert(Day5.compute(List(3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9), List(1)).output(0) === 1)
+    assert(Day5.compute(Intprog(List(3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9)), List(-1)).output(0) === 1)
+    assert(Day5.compute(Intprog(List(3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9)), List(0)).output(0) === 0)
+    assert(Day5.compute(Intprog(List(3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9)), List(1)).output(0) === 1)
 
-    assert(Day5.compute(List(3,3,1105,-1,9,1101,0,0,12,4,12,99,1), List(-1)).output(0) === 1)
-    assert(Day5.compute(List(3,3,1105,-1,9,1101,0,0,12,4,12,99,1), List(0)).output(0) === 0)
-    assert(Day5.compute(List(3,3,1105,-1,9,1101,0,0,12,4,12,99,1), List(1)).output(0) === 1)
+    assert(Day5.compute(Intprog(List(3,3,1105,-1,9,1101,0,0,12,4,12,99,1)), List(-1)).output(0) === 1)
+    assert(Day5.compute(Intprog(List(3,3,1105,-1,9,1101,0,0,12,4,12,99,1)), List(0)).output(0) === 0)
+    assert(Day5.compute(Intprog(List(3,3,1105,-1,9,1101,0,0,12,4,12,99,1)), List(1)).output(0) === 1)
 
     val input = List(3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
       1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
       999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99)
-    assert(Day5.compute(input, List(0)).output.head === 999)
-    assert(Day5.compute(input, List(8)).output.head === 1000)
-    assert(Day5.compute(input, List(100)).output.head === 1001)
+    assert(Day5.compute(Intprog(input), List(0)).output.head === 999)
+    assert(Day5.compute(Intprog(input), List(8)).output.head === 1000)
+    assert(Day5.compute(Intprog(input), List(100)).output.head === 1001)
+  }
+
+  test("AoC_2019.Day5 Results") {
+    val source = scala.io.Source.fromFile("resources\\day5_input.txt")
+    val lines = source.getLines().toArray
+    source.close()
+
+    val intcode = lines(0).split(',').map(s => s.toInt).toList
+
+    assert(Day5.compute(Intprog(intcode), List(1)).output === List(7566643, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+    assert(Day5.compute(Intprog(intcode), List(5)).output.head === 9265694)
   }
 
   test("AoC_2019.Day6 Part1") {
@@ -116,6 +128,16 @@ class AoC_2019_Test extends FunSuite {
       -5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,53,4,
       53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10)
     assert(Day7.calcThrusterOutput2(intcode2, List(9,7,8,5,6)) === 18216)
+  }
+
+  test("AoC_2019.Day7 Results") {
+    val source = scala.io.Source.fromFile("resources\\day7_input.txt")
+    val lines = source.getLines().toArray
+    source.close()
+
+    val intcode = lines(0).split(',').map(s => s.toInt).toList
+    assert(Day7.findBestThrusterInput(intcode) === 20413)
+    assert(Day7.findBestThrusterInput2(intcode) === 3321777)
   }
 
   test("AoC_2019.Day8 Part2") {

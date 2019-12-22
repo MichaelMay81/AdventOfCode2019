@@ -1,9 +1,11 @@
 package AoC_2019
 
+import AoC_2019.Day5.Intprog
+
 object Main {
   def main(args: Array[String]): Unit = {
     println("Hello world!")
-    day8()
+    day7()
   }
 
   def day1(): Unit = {
@@ -62,8 +64,8 @@ object Main {
 
     val intcode = lines(0).split(',').map(s => s.toInt).toList
 
-    println("day5 part1 result: " + Day5.compute(intcode, List(1)).output)
-    println("day5 part2 result: " + Day5.compute(intcode, List(5)).output)
+    println("day5 part1 result: " + Day5.compute(Intprog(intcode), List(1)).output)
+    println("day5 part2 result: " + Day5.compute(Intprog(intcode), List(5)).output)
   }
 
   def day6(): Unit = {
