@@ -1,8 +1,30 @@
 package AoC_2019
 
+import scala.collection.immutable.Queue
+import scala.language.implicitConversions
+
 object Day5 {
   type Intcode = List[Int]
-  case class Intprog(code: Intcode, pointer: Int = 0, finished: Boolean = false)
+  case class Intprog(
+                      code: Intcode,
+                      pointer: Int = 0,
+                      input: Queue[Int] = Queue(),
+                      output: List[Int] = List(),
+                      finished: Boolean = false) {
+    def process(): Intprog = compute(this)
+    def |>(moreProg: Intprog): Intprogs = Intprogs(Queue(this, moreProg))
+  }
+
+  case class Intprogs(progs: Queue[Intprog]) {
+    def |>(moreProg: Intprog): Intprogs = Intprogs(this.progs.enqueue(moreProg))
+  }
+
+  case class Intinput(data: Queue[Int]) {
+    def |>(moreData: Int): Intinput = Intinput(data.enqueue(moreData))
+    def |>(program: Intprog): Intprog = program.copy(input = program.input.enqueueAll(data))
+  }
+
+  implicit def intinput(data: Int): Intinput = Intinput(Queue(data))
 
   private def parseOpcode(opcode: Int) : List[Int] = {
     if (opcode < 100)
@@ -22,14 +44,10 @@ object Day5 {
     }
   }
 
-  case class RValue(program: Intprog, output: List[Int])
   @annotation.tailrec
-  def compute(program: Intprog,
-               input: List[Int] = List(),
-               output: List[Int] = List()): RValue =
+  private def compute(prog: Intprog): Intprog =
   {
-    val intcode = program.code
-    val intpointer = program.pointer
+    val Intprog(intcode, intpointer, input, output, _) = prog
     val opcodeAndParams = parseOpcode(intcode(intpointer))
 
     def getValue(i:Int) =
@@ -41,59 +59,48 @@ object Day5 {
 
     opcodeAndParams.head match {
       case 1 => // Add
-        compute(
-          Intprog(
-            intcode.updated(writeTo(3), getValue(1) + getValue(2)),
-            intpointer + 4),
-          input,
-          output)
+        compute(prog.copy(
+          code = intcode.updated(writeTo(3), getValue(1) + getValue(2)),
+          pointer = intpointer + 4))
       case 2 => // Mul
-        compute(
-          Intprog(
-            intcode.updated(writeTo(3), getValue(1) * getValue(2)),
-            intpointer + 4),
-          input,
-          output)
+        compute(prog.copy(
+          code = intcode.updated(writeTo(3), getValue(1) * getValue(2)),
+          pointer = intpointer + 4))
       case 3 => // Input
-        if (input.nonEmpty)
-          compute(
-            Intprog(
-              intcode.updated(writeTo(1), input.head),
-              intpointer + 2),
-            input.drop(1),
-            output)
-        else {
-          RValue(program, output)
+        if (input.nonEmpty) {
+          //println("in: " + input.head)
+          compute(prog.copy(
+            code = intcode.updated(writeTo(1), input.head),
+            pointer = intpointer + 2,
+            input = input.drop(1)))
         }
+        else prog
       case 4 => // Output
-        compute(
-          Intprog(intcode, intpointer + 2),
-          input,
-          getValue(1) :: output)
+        //println("out: " + getValue(1) + " ... " + getValue(1) :: output)
+        compute(prog.copy(
+          pointer = intpointer + 2,
+          output = getValue(1) :: output))
       case 5 => // jump-if-true
-        val newIntPointer = if (getValue(1) != 0) getValue(2) else intpointer + 3
-        compute(Intprog(intcode, newIntPointer), input, output)
+        compute(prog.copy(
+          pointer = if (getValue(1) != 0) getValue(2) else intpointer + 3))
       case 6 => // jump-if-false
-        val newIntPointer = if (getValue(1) == 0) getValue(2) else intpointer + 3
-        compute(Intprog(intcode, newIntPointer), input, output)
+        compute(prog.copy(
+          pointer = if (getValue(1) == 0) getValue(2) else intpointer + 3))
       case 7 => // less than
-        compute(
-          Intprog(
-            intcode.updated(
-              writeTo(3),
-              if (getValue(1) < getValue(2)) 1 else 0),
-            intpointer + 4),
-          input, output)
+        compute(prog.copy(
+          code = intcode.updated(
+            writeTo(3),
+            if (getValue(1) < getValue(2)) 1 else 0),
+          pointer = intpointer + 4))
       case 8 => // equals
-        compute(
-          Intprog(
-            intcode.updated(
-              writeTo(3),
-              if (getValue(1) == getValue(2)) 1 else 0),
-            intpointer + 4),
-          input, output)
+        compute(prog.copy(
+          code = intcode.updated(
+            writeTo(3),
+            if (getValue(1) == getValue(2)) 1 else 0),
+          pointer = intpointer + 4))
       case 99 =>
-        RValue(Intprog(program.code, program.pointer, finished = true), output)
+        //println("FIN")
+        prog.copy(finished = true)
     }
   }
 }

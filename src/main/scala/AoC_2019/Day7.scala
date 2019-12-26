@@ -1,58 +1,66 @@
 package AoC_2019
 import scala.collection.immutable.Queue
-import Day5.Intprog
+import Day5.{Intprog, Intprogs}
 
 object Day7 {
-  def calcThrusterOutput(intcode: List[Int], input: List[Int]): Int = {
-    @annotation.tailrec
-    def calcAmps(input: List[Int], lastOutput: Int = 0, intcodes: List[List[Int]] = List()): (Int, List[List[Int]]) =
-      input match {
-        case Nil => (lastOutput, intcodes)
-        case in :: rest =>
-          val result = Day5.compute(Intprog(intcode), List(in, lastOutput))
-          calcAmps(
-            rest,
-            result.output.head,
-            result.program.code :: intcodes)
-      }
-
-    calcAmps(input)._1
-  }
-  def calcThrusterOutput2(intcode: List[Int], input: List[Int]): Int = {
-
-    case class Status(input: Option[Int], program: Intprog = Intprog(intcode))
-
-    @annotation.tailrec
-    def calcAmps(processQueue: Queue[Status], lastOutput: List[Int] = List(0)): List[Int] =
-      processQueue match {
-        case in +: rest => {
-          val input = in.input match {
-            case None => lastOutput.reverse
-            case Some(in) => in :: lastOutput.reverse
-          }
-          val result = Day5.compute(in.program, input)
-
-          if (result.program.finished) {
-            calcAmps(
-              rest,
-              result.output)
-          } else {
-            calcAmps(
-              rest.enqueue(Status(None, result.program)),
-              result.output)
-          }
+  @annotation.tailrec
+  private def computeProgs(progsIn: Queue[Intprog],
+                           lastOutput: Option[List[Int]] = None,
+                           progsOut: List[Intprog] = List())
+  : List[Intprog] = {
+    progsIn match {
+      case in +: rest =>
+        lastOutput match {
+          case None =>
+            val newProc = in.process()
+            computeProgs(rest, Some(newProc.output), List(newProc))
+          case Some(outputs) =>
+            val newProc = in.copy(input = in.input.enqueueAll(outputs)).process()
+            computeProgs(rest, Some(newProc.output), newProc :: progsOut)
         }
-        case _ => lastOutput
-      }
+      case _ => progsOut
+    }
+  }
 
-    calcAmps(Queue.from(input.map(i => Status(Some(i))))).sum
+  def compute(progs: Intprogs): Int = {
+    computeProgs(progs.progs).head.output.head
+  }
+
+  def computeFeedbackLoop(progs: Intprogs): Int = {
+    @annotation.tailrec
+    def cfl(progs: Queue[Intprog], lastOutput: Option[List[Int]] = None): List[Intprog] = {
+      val result = computeProgs(progs, lastOutput)
+      if (result.head.finished)
+        result
+      else {
+        cfl(
+          Queue.from(result.reverse.map(prog => prog.copy(output = List()))),
+          Some(result.head.output))
+      }
+    }
+
+    cfl(progs.progs).head.output.head
+  }
+
+  def amplifiers(code: List[Int], inputs: List[Int]): Day5.Intprogs =
+  {
+    import Day5.intinput
+
+    val intprog1 = Intprog(code)
+    (inputs(0) |> 0 |> intprog1) |>
+      (inputs(1) |> intprog1) |>
+      (inputs(2) |> intprog1) |>
+      (inputs(3) |> intprog1) |>
+      (inputs(4) |> intprog1)
   }
 
   def findBestThrusterInput(intcode: List[Int]): Int = {
-    (0 to 4).permutations.map(input => calcThrusterOutput(intcode, input.toList)).max
+    val amps = amplifiers(intcode, _)
+    (0 to 4).toList.permutations.map(input => compute(amps(input))).max
   }
 
-  def findBestThrusterInput2(intcode: List[Int]): Int = {
-    (5 to 9).permutations.map(input => calcThrusterOutput2(intcode, input.toList)).max
+  def findBestThrusterInputWithFeedbackLoop(intcode: List[Int]): Int = {
+    val amps = amplifiers(intcode, _)
+    (5 to 9).toList.permutations.map(input => computeFeedbackLoop(amps(input))).max
   }
 }

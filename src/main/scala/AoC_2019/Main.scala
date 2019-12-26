@@ -58,14 +58,18 @@ object Main {
   }
 
   def day5(): Unit = {
+    import Day5.intinput
+
     val source = scala.io.Source.fromFile("resources\\day5_input.txt")
     val lines = source.getLines().toArray
     source.close()
 
     val intcode = lines(0).split(',').map(s => s.toInt).toList
 
-    println("day5 part1 result: " + Day5.compute(Intprog(intcode), List(1)).output)
-    println("day5 part2 result: " + Day5.compute(Intprog(intcode), List(5)).output)
+    val prog1 = 1 |> Intprog(intcode)
+    val prog2 = 5 |> Intprog(intcode)
+    println("day5 part1 result: " + prog1.process().output)
+    println("day5 part2 result: " + prog2.process().output)
   }
 
   def day6(): Unit = {
@@ -84,7 +88,7 @@ object Main {
 
     val intcode = lines(0).split(',').map(s => s.toInt).toList
     println("day7 part1 result: " + Day7.findBestThrusterInput(intcode))
-    println("day7 part2 result: " + Day7.findBestThrusterInput2(intcode))
+    println("day7 part2 result: " + Day7.findBestThrusterInputWithFeedbackLoop(intcode))
   }
 
   def day8(): Unit = {
