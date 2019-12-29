@@ -5,7 +5,7 @@ import AoC_2019.Day5.Intprog
 object Main {
   def main(args: Array[String]): Unit = {
     println("Hello world!")
-    day7()
+    day9()
   }
 
   def day1(): Unit = {
@@ -100,5 +100,17 @@ object Main {
     println("day8 part1 result: " + Day8.calcCheckSum(input))
 
     Day8.renderImage(input)
+  }
+
+  def day9(): Unit = {
+    import Day5.intinput
+
+    val source = scala.io.Source.fromFile("resources\\day9_input.txt")
+    val lines = source.getLines().toArray
+    source.close()
+
+    val intcode = lines(0).split(',').map(s => s.toLong).toList
+    println("day9 part1 result: " + (1 |> Intprog(intcode)).process().output)
+    //println("day9 part2 result: " + (2 |> Intprog(intcode)).process().output)
   }
 }

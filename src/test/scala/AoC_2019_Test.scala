@@ -188,4 +188,29 @@ class AoC_2019_Test extends FunSuite {
     val img = Day8.stringToImage(strImage, 2, 2)
     assert(Day8.renderImage(img, false) === Image(List(Layer(List(Row(List(0, 1)), Row(List(1, 0))))), 2, 2))
   }
+
+  // DAY 9
+  test("AoC_2019.Day9") {
+    val intcode1 = List(109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99)
+    assert(Intprog(intcode1).process().output === intcode1.reverse)
+
+    val intcode2 = List(1102,34915192,34915192,7,4,7,99,0)
+    assert(Intprog(intcode2).process().output.head.toString.length === 16)
+    assert(Intprog(intcode2).process().output.head === 1219070632396864L)
+
+    val intcode3 = List(104,1125899906842624L,99)
+    assert(Intprog(intcode3).process().output.head === 1125899906842624L)
+  }
+
+  test("AoC_2019.Day9 Results") {
+    import Day5.intinput
+
+    val source = scala.io.Source.fromFile("resources\\day9_input.txt")
+    val lines = source.getLines().toArray
+    source.close()
+
+    val intcode = lines(0).split(',').map(s => s.toLong).toList
+    assert((1 |> Intprog(intcode)).process().output.head === 3512778005L)
+    //assert((2 |> Intprog(intcode)).process().output.head === 35920)
+  }
 }

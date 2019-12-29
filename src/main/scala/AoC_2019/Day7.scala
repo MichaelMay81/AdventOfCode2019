@@ -5,7 +5,7 @@ import Day5.{Intprog, Intprogs}
 object Day7 {
   @annotation.tailrec
   private def computeProgs(progsIn: Queue[Intprog],
-                           lastOutput: Option[List[Int]] = None,
+                           lastOutput: Option[List[Long]] = None,
                            progsOut: List[Intprog] = List())
   : List[Intprog] = {
     progsIn match {
@@ -22,13 +22,13 @@ object Day7 {
     }
   }
 
-  def compute(progs: Intprogs): Int = {
+  def compute(progs: Intprogs): Long = {
     computeProgs(progs.progs).head.output.head
   }
 
-  def computeFeedbackLoop(progs: Intprogs): Int = {
+  def computeFeedbackLoop(progs: Intprogs): Long = {
     @annotation.tailrec
-    def cfl(progs: Queue[Intprog], lastOutput: Option[List[Int]] = None): List[Intprog] = {
+    def cfl(progs: Queue[Intprog], lastOutput: Option[List[Long]] = None): List[Intprog] = {
       val result = computeProgs(progs, lastOutput)
       if (result.head.finished)
         result
@@ -54,12 +54,12 @@ object Day7 {
       (inputs(4) |> intprog1)
   }
 
-  def findBestThrusterInput(intcode: List[Int]): Int = {
+  def findBestThrusterInput(intcode: List[Int]): Long = {
     val amps = amplifiers(intcode, _)
     (0 to 4).toList.permutations.map(input => compute(amps(input))).max
   }
 
-  def findBestThrusterInputWithFeedbackLoop(intcode: List[Int]): Int = {
+  def findBestThrusterInputWithFeedbackLoop(intcode: List[Int]): Long = {
     val amps = amplifiers(intcode, _)
     (5 to 9).toList.permutations.map(input => computeFeedbackLoop(amps(input))).max
   }
