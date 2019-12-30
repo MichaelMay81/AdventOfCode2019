@@ -47,7 +47,7 @@ object Day7 {
     import Day5.intinput
 
     val intprog1 = Intprog(code)
-    (inputs(0) |> 0 |> intprog1) |>
+    (inputs.head |> 0 |> intprog1) |>
       (inputs(1) |> intprog1) |>
       (inputs(2) |> intprog1) |>
       (inputs(3) |> intprog1) |>

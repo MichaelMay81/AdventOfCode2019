@@ -1,6 +1,7 @@
+import AoC_2019.Day10.Asteroid
 import AoC_2019.Day5.{Intinput, Intprog}
 import AoC_2019.Day8.{Image, Layer, Row}
-import AoC_2019.{Day1, Day2, Day3, Day4, Day5, Day6, Day7, Day8}
+import AoC_2019.{Day1, Day10, Day2, Day3, Day4, Day5, Day6, Day7, Day8}
 import org.scalatest.FunSuite
 
 class AoC_2019_Test extends FunSuite {
@@ -212,5 +213,23 @@ class AoC_2019_Test extends FunSuite {
     val intcode = lines(0).split(',').map(s => s.toLong).toList
     assert((1 |> Intprog(intcode)).process().output.head === 3512778005L)
     //assert((2 |> Intprog(intcode)).process().output.head === 35920)
+  }
+
+  // DAY 10
+  test("AoC_2019.Day10") {
+    val input1 = ".#..#\n.....\n#####\n....#\n...##"
+    assert(Day10.computeBestLocation(input1) === (Asteroid(3,4), 8))
+
+    val input2 = "......#.#.\n#..#.#....\n..#######.\n.#.#.###..\n.#..#.....\n..#....#.#\n#..#....#.\n.##.#..###\n##...#..#.\n.#....####"
+    assert(Day10.computeBestLocation(input2) === (Asteroid(5,8), 33))
+
+    val input3 = "#.#...#.#.\n.###....#.\n.#....#...\n##.#.#.#.#\n....#.#.#.\n.##..###.#\n..#...##..\n..##....##\n......#...\n.####.###."
+    assert(Day10.computeBestLocation(input3) === (Asteroid(1,2), 35))
+
+    val input4 = ".#..#..###\n####.###.#\n....###.#.\n..###.##.#\n##.##.#.#.\n....###..#\n..#.#..#.#\n#..#.#.###\n.##...##.#\n.....#.#.."
+    assert(Day10.computeBestLocation(input4) === (Asteroid(6,3), 41))
+
+    val input5 = ".#..##.###...#######\n##.############..##.\n.#.######.########.#\n.###.#######.####.#.\n#####.##.#.##.###.##\n..#####..#.#########\n####################\n#.####....###.#.#.##\n##.#################\n#####.##.###..####..\n..######..##.#######\n####.##.####...##..#\n.#####..#.######.###\n##...#.##########...\n#.##########.#######\n.####.#.###.###.#.##\n....##.##.###..#####\n.#.#.###########.###\n#.#.#.#####.####.###\n###.##.####.##.#..##"
+    assert(Day10.computeBestLocation(input5) === (Asteroid(11,13), 210))
   }
 }
