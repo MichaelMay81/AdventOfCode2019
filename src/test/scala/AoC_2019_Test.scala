@@ -216,7 +216,7 @@ class AoC_2019_Test extends FunSuite {
   }
 
   // DAY 10
-  test("AoC_2019.Day10") {
+  test("AoC_2019.Day10 Part1") {
     val input1 = ".#..#\n.....\n#####\n....#\n...##"
     assert(Day10.computeBestLocation(input1) === (Asteroid(3,4), 8))
 
@@ -231,5 +231,40 @@ class AoC_2019_Test extends FunSuite {
 
     val input5 = ".#..##.###...#######\n##.############..##.\n.#.######.########.#\n.###.#######.####.#.\n#####.##.#.##.###.##\n..#####..#.#########\n####################\n#.####....###.#.#.##\n##.#################\n#####.##.###..####..\n..######..##.#######\n####.##.####...##..#\n.#####..#.######.###\n##...#.##########...\n#.##########.#######\n.####.#.###.###.#.##\n....##.##.###..#####\n.#.#.###########.###\n#.#.#.#####.####.###\n###.##.####.##.#..##"
     assert(Day10.computeBestLocation(input5) === (Asteroid(11,13), 210))
+  }
+
+  test("AoC_2019.Day10 Part2") {
+    val as = List(
+      // 0/1 CCW, 0/-1 CCW, 0/-1 CW
+      (Asteroid(0, 2),     0, 180, 180),
+      (Asteroid(2,	2),   45, 225, 135),
+      (Asteroid(2,	0),   90, 270,  90),
+      (Asteroid(2,	-2), 135, 315,  45),
+      (Asteroid(0,	-2), 180,   0,   0),
+      (Asteroid(-2,	-2), 225,  45, 315),
+      (Asteroid(-2,	0),  270,  90, 270),
+      (Asteroid(-2,	2),  315, 135, 225)
+    )
+
+    val yAxisM = Asteroid(0, 1)
+    val yAxis = Asteroid(0, -1)
+    for ((ast, ang1, ang2, ang3) <- as) {
+      assert(math.toDegrees(yAxisM.angle(ast, ccw = true)) === ang1)
+      assert(math.toDegrees(yAxis.angle(ast, ccw = true)) === ang2)
+      assert(math.toDegrees(yAxis.angle(ast)) === ang3)
+    }
+
+    val input2 = ".#..##.###...#######\n##.############..##.\n.#.######.########.#\n.###.#######.####.#.\n#####.##.#.##.###.##\n..#####..#.#########\n####################\n#.####....###.#.#.##\n##.#################\n#####.##.###..####..\n..######..##.#######\n####.##.####...##..#\n.#####..#.######.###\n##...#.####X#####...\n#.##########.#######\n.####.#.###.###.#.##\n....##.##.###..#####\n.#.#.###########.###\n#.#.#.#####.####.###\n###.##.####.##.#..##"
+    assert(Day10.computeVaporizationByGiantLaser(input2).head === Asteroid(11, 12))
+    assert(Day10.computeVaporizationByGiantLaser(input2)(2-1) === Asteroid(12, 1))
+    assert(Day10.computeVaporizationByGiantLaser(input2)(3-1) === Asteroid(12, 2))
+    assert(Day10.computeVaporizationByGiantLaser(input2)(10-1) === Asteroid(12, 8))
+    assert(Day10.computeVaporizationByGiantLaser(input2)(20-1) === Asteroid(16, 0))
+    assert(Day10.computeVaporizationByGiantLaser(input2)(50-1) === Asteroid(16, 9))
+    assert(Day10.computeVaporizationByGiantLaser(input2)(100-1) === Asteroid(10, 16))
+    assert(Day10.computeVaporizationByGiantLaser(input2)(199-1) === Asteroid(9, 6))
+    assert(Day10.computeVaporizationByGiantLaser(input2)(200-1) === Asteroid(8, 2))
+    assert(Day10.computeVaporizationByGiantLaser(input2)(201-1) === Asteroid(10, 9))
+    assert(Day10.computeVaporizationByGiantLaser(input2)(299-1) === Asteroid(11, 1))
   }
 }

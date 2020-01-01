@@ -1,5 +1,6 @@
 package AoC_2019
 
+import AoC_2019.Day10.computeAsteroidLocations
 import AoC_2019.Day5.Intprog
 
 object Main {
@@ -119,6 +120,13 @@ object Main {
     val lines = source.mkString
     source.close()
 
-    println("day10 part1 result: " + Day10.computeBestLocation(lines))
+    val (asteroids, _) = computeAsteroidLocations(lines)
+
+    val (station, _) = Day10.computeBestLocation(asteroids)
+    println("day10 part1 result: " + station)
+
+    val asteroids2 = asteroids.filter(a => a != station)
+    val results = Day10.computeVaporizationByGiantLaser(asteroids2, station)
+    println("day10 part2 result: " + results(200-1))
   }
 }
