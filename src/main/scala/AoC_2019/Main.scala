@@ -1,12 +1,13 @@
 package AoC_2019
 
 import AoC_2019.Day10.computeAsteroidLocations
+import AoC_2019.Day11.{Black, Position}
 import AoC_2019.Day5.Intprog
 
 object Main {
   def main(args: Array[String]): Unit = {
     println("Hello world!")
-    day10()
+    day11()
   }
 
   def day1(): Unit = {
@@ -128,5 +129,23 @@ object Main {
     val asteroids2 = asteroids.filter(a => a != station)
     val results = Day10.computeVaporizationByGiantLaser(asteroids2, station)
     println("day10 part2 result: " + results(200-1))
+  }
+
+  def day11(): Unit = {
+    val source = scala.io.Source.fromFile("resources\\day11_input.txt")
+    val lines = source.getLines().toArray
+    source.close()
+    val intcode = lines(0).split(',').map(s => s.toLong).toList
+
+    Day11.PrintOutHull(Map((Position(0, 0), Day11.Black())), Some(Day11.RoboPosition(0, 0, Day11.Up())))
+
+    // Part 1
+    val result = Day11.EmergencyHullPaintingRobot(Intprog(intcode))
+    println(result._1.size)
+
+    // Part2
+    val result2 = Day11.EmergencyHullPaintingRobot(Intprog(intcode), hull = Map((Position(0, 0), Day11.White())))
+    Day11.PrintOutHull(result2._1)
+    // BLULZJLZ
   }
 }
